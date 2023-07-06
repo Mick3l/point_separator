@@ -40,7 +40,7 @@ class neural_network(object):
         temp = np.exp(a)
         return temp / np.sum(temp)
 
-    def study(self, x: np.ndarray, y: np.ndarray):
+    def _study(self, x: np.ndarray, y: np.ndarray):
         t1 = x @ self.W1 + self.b1
         h1 = neural_network._relu(t1)
         t2 = h1 @ self.W2 + self.b2
@@ -61,6 +61,12 @@ class neural_network(object):
         self.b1 -= self.ALPHA * dE_db1
         self.W2 -= self.ALPHA * dE_dW2
         self.b2 -= self.ALPHA * dE_db2
+
+    def study(self, data: list, results: list) -> None:
+        if len(data) != len(results):
+            raise ValueError("neural_network.study(): size of data is not equal to size of answers")
+        for i in range(len(data)):
+            self._study(data[i], results[i])
 
     def get_ans(self, x: np.ndarray) -> np.ndarray:
         t1 = x @ self.W1 + self.b1
